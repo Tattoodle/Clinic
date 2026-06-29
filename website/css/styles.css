@@ -1,0 +1,507 @@
+/* ============================================================
+   Rathmines Doctors Clinic
+   Brand palette derived from the existing drclinicdublin.com:
+   brick red, olive/sage green, sage-grey hero, grey page,
+   white centred content card, condensed uppercase headings.
+   ============================================================ */
+
+:root {
+  --red:        #c43131;   /* brand red, taken from the original logo */
+  --red-bright: #d84a4a;
+  --green:      #7e9a4f;   /* olive/sage accent */
+  --green-dark: #6d8743;
+  --hero-grey:  #7c847a;   /* desaturated sage-grey hero */
+  --hero-grey2: #6a7269;
+  --page:       #ececec;
+  --card:       #ffffff;
+  --alt:        #f6f6f4;
+  --ink:        #3f3f3f;
+  --muted:      #6f6f6f;
+  --line:       #e3e3e0;
+  --maxw:       1040px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  padding: 30px 18px;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--green-dark); }
+
+h1, h2, h3,
+.brand__name, .hero__title, .section__heading {
+  font-family: "Oswald", "Open Sans", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ---- white card with margin + rounded corners ---- */
+.page {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 44px rgba(0,0,0,0.09);
+}
+
+/* ============ HEADER ============ */
+.site-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 26px 40px 18px;
+  position: relative;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  margin-right: auto;
+}
+.brand__logo { display: inline-flex; }
+.brand__logo img { display: block; height: 58px; width: auto; }
+.brand__text { display: flex; flex-direction: column; line-height: 1; }
+.brand__name {
+  font-size: 32px;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+.brand__sub {
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  color: var(--green);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.header-cta { text-align: right; line-height: 1.3; }
+.header-cta__label {
+  display: block;
+  font-family: "Oswald", sans-serif;
+  font-size: 22px;
+  color: var(--ink);
+}
+.header-cta__phone {
+  font-weight: 700;
+  color: var(--green);
+  text-decoration: none;
+  font-size: 17px;
+}
+.header-cta__phone:hover { text-decoration: underline; }
+
+/* ---- nav ---- */
+.primary-nav {
+  flex-basis: 100%;
+  display: flex;
+  gap: 28px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.primary-nav a {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.primary-nav a:hover { color: var(--red); border-bottom-color: var(--red); }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 40px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 22px;
+  margin: 0 auto;
+  background: var(--ink);
+  transition: transform .2s, opacity .2s;
+}
+
+/* ============ HERO ============ */
+.hero {
+  margin: 6px 40px 0;
+  background: linear-gradient(135deg, var(--hero-grey), var(--hero-grey2));
+  color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 44px 44px;
+  overflow: hidden;
+}
+.hero__overlay { flex: 1 1 60%; }
+.hero__eyebrow {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 15px;
+  margin: 0 0 8px;
+  color: rgba(255,255,255,0.92);
+}
+.hero__title {
+  font-size: 44px;
+  line-height: 1.05;
+  margin: 0 0 22px;
+  text-transform: none;
+}
+.hero__points {
+  list-style: none;
+  margin: 0 0 26px;
+  padding: 0;
+}
+.hero__points li {
+  position: relative;
+  padding-left: 26px;
+  margin: 10px 0;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.6px;
+}
+.hero__points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 10px;
+  width: 9px; height: 9px;
+  border: 2px solid rgba(255,255,255,0.9);
+  border-radius: 50%;
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero__art {
+  flex: 0 0 180px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero__art-icon {
+  display: block;
+  width: 150px;
+  height: 150px;
+  background: rgba(255,255,255,0.92);
+  -webkit-mask: url(../assets/icons/checkup.svg) center / contain no-repeat;
+  mask: url(../assets/icons/checkup.svg) center / contain no-repeat;
+}
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-block;
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 15px;
+  padding: 12px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.btn--primary { background: var(--red); color: #fff; }
+.btn--primary:hover { background: var(--red-bright); }
+.btn--ghost { border: 2px solid rgba(255,255,255,0.85); color: #fff; padding: 10px 20px; }
+.btn--ghost:hover { background: rgba(255,255,255,0.15); }
+
+/* ============ INTRO ============ */
+.intro {
+  margin: 32px 40px 8px;
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 760px;
+}
+.intro strong { color: var(--ink); }
+
+/* ============ QUICK FACTS ============ */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  padding: 30px 40px 40px;
+  text-align: center;
+}
+.fact__icon {
+  width: 46px; height: 46px;
+  display: inline-block;
+}
+.fact__title {
+  font-family: "Oswald", sans-serif;
+  font-size: 19px;
+  margin: 12px 0 6px;
+  color: var(--ink);
+}
+.fact__text { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+/* ============ SECTIONS ============ */
+.section { padding: 44px 40px; border-top: 1px solid var(--line); }
+.section--alt { background: var(--alt); }
+.section__heading {
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink);
+  margin: 0 0 6px;
+  position: relative;
+  padding-bottom: 12px;
+}
+.section__heading::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 64px; height: 3px;
+  background: var(--green);
+  border-radius: 2px;
+}
+.section__lede, .section__heading + .section__lede { color: var(--muted); margin: 14px 0 24px; }
+
+/* ---- meet the doctor ---- */
+.doctor { display: flex; gap: 36px; align-items: flex-start; margin-top: 24px; }
+.doctor__photo { flex: 0 0 260px; }
+.doctor__photo img {
+  width: 260px; height: 312px;
+  object-fit: cover;
+  object-position: center 52%;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  image-rendering: -webkit-optimize-contrast;
+}
+.doctor__bio { flex: 1; }
+.doctor__name { font-size: 26px; margin: 0; color: var(--ink); }
+.doctor__quals {
+  color: var(--green-dark);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 4px 0 16px;
+}
+
+/* ---- services ---- */
+.services {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 3;
+  column-gap: 36px;
+}
+.services li {
+  break-inside: avoid;
+  position: relative;
+  padding: 8px 0 8px 26px;
+  border-bottom: 1px solid var(--line);
+  font-size: 16px;
+}
+.services li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 15px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ---- appointments ---- */
+.appointments { display: flex; gap: 36px; align-items: stretch; margin-top: 20px; }
+.appointments__info { flex: 1 1 42%; }
+.appointments__lede { margin-top: 0; color: var(--ink); }
+.contact-list { margin: 20px 0 0; }
+.contact-list > div { padding: 12px 0; border-top: 1px solid var(--line); }
+.contact-list dt {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13.5px;
+  color: var(--green-dark);
+}
+.contact-list dd { margin: 4px 0 0; color: var(--ink); }
+.contact-list a { font-weight: 700; text-decoration: none; }
+.contact-list a:hover { text-decoration: underline; }
+
+.appointments__map { flex: 1 1 58%; display: flex; flex-direction: column; }
+.appointments__map iframe {
+  width: 100%;
+  height: 340px;
+  border: 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  flex: 1;
+  min-height: 300px;
+}
+.map-link {
+  margin-top: 10px;
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--green-dark);
+}
+.map-link:hover { text-decoration: underline; }
+.map-link__icon { width: 16px; height: 16px; vertical-align: -3px; margin-right: 7px; }
+
+/* ---- fees + hours ---- */
+.twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.panel { }
+.fee {
+  font-family: "Oswald", sans-serif;
+  font-size: 56px;
+  color: var(--red);
+  margin: 10px 0 0;
+  line-height: 1;
+}
+.fee__label { margin: 6px 0 16px; font-size: 18px; color: var(--ink); }
+.panel__note { color: var(--muted); font-size: 15.5px; }
+
+.hours { width: 100%; border-collapse: collapse; margin: 12px 0 0; }
+.hours th, .hours td { text-align: left; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.hours th { font-weight: 600; color: var(--ink); }
+.hours td { text-align: right; color: var(--green-dark); font-weight: 700; }
+
+.ooh {
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--red);
+  border-radius: 4px;
+  padding: 14px 18px;
+}
+.ooh__label {
+  margin: 0 0 2px;
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.ooh__phone { font-size: 22px; font-weight: 700; color: var(--red); text-decoration: none; }
+.ooh__phone:hover { text-decoration: underline; }
+
+/* ============ INFO CARD ============ */
+.infocard { padding: 30px 40px 44px; }
+.infocard__inner {
+  max-width: 460px;
+  margin: 0 auto;
+  background: var(--hero-grey);
+  color: #fff;
+  border-radius: 6px;
+  text-align: center;
+  padding: 28px 30px;
+}
+.infocard__mark {
+  display: inline-block;
+  width: 30px; height: 30px;
+  margin-bottom: 4px;
+  background: #fff;
+  -webkit-mask: url(../assets/icons/cross.svg) center / contain no-repeat;
+  mask: url(../assets/icons/cross.svg) center / contain no-repeat;
+}
+.infocard__name {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 22px;
+  margin: 4px 0 6px;
+}
+.infocard__line { margin: 6px 0; font-size: 15.5px; color: rgba(255,255,255,0.92); }
+.infocard hr { border: none; border-top: 1px dashed rgba(255,255,255,0.35); margin: 14px 0; }
+.infocard__cta {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin: 4px 0 2px;
+}
+.infocard__phone { color: #fff; font-size: 20px; font-weight: 700; text-decoration: none; }
+.infocard__phone:hover { text-decoration: underline; }
+
+/* ============ FOOTER ============ */
+.site-footer {
+  text-align: center;
+  padding: 36px 40px 44px;
+  border-top: 1px solid var(--line);
+}
+.site-footer__tag { font-style: italic; color: var(--muted); margin: 0 0 10px; }
+.site-footer__guarantee {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--green-dark);
+  font-size: 20px;
+  margin: 0 0 18px;
+}
+.site-footer__copy { color: var(--muted); font-size: 14px; margin: 0; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 860px) {
+  .services { columns: 2; }
+  .doctor { flex-direction: column; align-items: center; text-align: center; }
+  .doctor__quals { letter-spacing: 0.5px; }
+  .appointments { flex-direction: column; }
+  .twocol { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; gap: 24px; }
+  .hero__art { display: none; }
+}
+
+@media (max-width: 680px) {
+  body { font-size: 16px; padding: 12px; }
+  .page { border-radius: 10px; }
+  .site-header { padding: 20px 20px 14px; }
+  .header-cta { text-align: left; }
+  .nav-toggle { display: flex; order: 3; margin-left: auto; }
+  .header-cta { order: 2; }
+
+  .primary-nav {
+    order: 4;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 14px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .25s ease;
+    border-top: 1px solid var(--line);
+    padding-top: 0;
+  }
+  .primary-nav.open { max-height: 360px; }
+  .primary-nav a { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .primary-nav a:hover { border-bottom-color: var(--line); }
+
+  .hero { margin: 6px 20px 0; padding: 30px 24px; }
+  .hero__title { font-size: 34px; }
+  .intro, .section, .infocard, .site-footer { padding-left: 20px; padding-right: 20px; }
+  .intro { margin-left: 20px; margin-right: 20px; }
+  .services { columns: 1; }
+  .doctor__photo img { width: 200px; height: 240px; }
+  .fee { font-size: 46px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

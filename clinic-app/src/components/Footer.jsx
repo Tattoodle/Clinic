@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { clinic, nav } from "../data";
+import { asset } from "../assetUrl";
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
         <div className="site-footer__grid">
           <div>
             <div className="site-footer__brand">
-              <img src="/assets/logo.svg" alt="" />
+              <img src={asset("assets/logo.svg")} alt="" />
               <strong>Rathmines Doctors Clinic</strong>
             </div>
             <p className="site-footer__tag">

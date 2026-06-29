@@ -4,6 +4,7 @@ import Page from "../components/Page.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Seo from "../components/Seo.jsx";
 import { clinic } from "../data";
+import { asset } from "../assetUrl";
 
 export default function Doctor() {
   return (
@@ -31,7 +32,7 @@ export default function Doctor() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img src="/assets/dr-george-joyce.jpeg" alt="Dr George Joyce, GP at Rathmines Doctors Clinic" />
+            <img src={asset("assets/dr-george-joyce.jpeg")} alt="Dr George Joyce, GP at Rathmines Doctors Clinic" />
           </motion.div>
 
           <div className="doctor__bio">

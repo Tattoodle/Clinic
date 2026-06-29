@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { clinic, nav } from "../data";
+import { asset } from "../assetUrl";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -14,7 +15,7 @@ export default function Header() {
     <header className="site-header">
       <div className="container site-header__inner">
         <NavLink to="/" className="brand">
-          <img className="brand__logo" src="/assets/logo.svg" alt="" />
+          <img className="brand__logo" src={asset("assets/logo.svg")} alt="" />
           <span className="brand__text">
             <span className="brand__name">Rathmines</span>
             <span className="brand__sub">Doctors Clinic</span>

@@ -3,6 +3,12 @@ import Page from "../components/Page.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Seo from "../components/Seo.jsx";
 import { clinic } from "../data";
+import { asset } from "../assetUrl";
+
+const mask = (name) => ({
+  WebkitMaskImage: `url(${asset(`assets/icons/${name}`)})`,
+  maskImage: `url(${asset(`assets/icons/${name}`)})`,
+});
 
 export default function Contact() {
   return (
@@ -32,7 +38,7 @@ export default function Contact() {
             <h3>Get in touch</h3>
 
             <div className="info-row">
-              <span className="info-row__icon" style={{ WebkitMaskImage: "url(/assets/icons/checkup.svg)", maskImage: "url(/assets/icons/checkup.svg)" }} />
+              <span className="info-row__icon" style={mask("checkup.svg")} />
               <div>
                 <div className="info-row__label">Telephone</div>
                 <div className="info-row__value">
@@ -42,7 +48,7 @@ export default function Contact() {
             </div>
 
             <div className="info-row">
-              <span className="info-row__icon" style={{ WebkitMaskImage: "url(/assets/icons/card.svg)", maskImage: "url(/assets/icons/card.svg)" }} />
+              <span className="info-row__icon" style={mask("card.svg")} />
               <div>
                 <div className="info-row__label">Address</div>
                 <div className="info-row__value">
@@ -52,7 +58,7 @@ export default function Contact() {
             </div>
 
             <div className="info-row">
-              <span className="info-row__icon" style={{ WebkitMaskImage: "url(/assets/icons/compass.svg)", maskImage: "url(/assets/icons/compass.svg)" }} />
+              <span className="info-row__icon" style={mask("compass.svg")} />
               <div>
                 <div className="info-row__label">Parking</div>
                 <div className="info-row__value">{clinic.parking}</div>
@@ -70,7 +76,7 @@ export default function Contact() {
               />
             </div>
             <a className="map-link" href={clinic.mapLink} target="_blank" rel="noopener">
-              <span className="map-link__icon" />
+              <span className="map-link__icon" style={mask("compass.svg")} />
               Get directions in Google Maps
             </a>
           </Reveal>

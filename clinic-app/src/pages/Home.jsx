@@ -4,6 +4,12 @@ import Page from "../components/Page.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Seo from "../components/Seo.jsx";
 import { clinic } from "../data";
+import { asset } from "../assetUrl";
+
+const stethMask = {
+  WebkitMaskImage: `url(${asset("assets/icons/checkup.svg")})`,
+  maskImage: `url(${asset("assets/icons/checkup.svg")})`,
+};
 
 const heroPoints = [
   ["General practice", "Routine and ongoing medical care"],
@@ -86,7 +92,7 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
           >
-            <div className="hero__panel-steth" />
+            <div className="hero__panel-steth" style={stethMask} />
             <ul className="hero__panel-list">
               {heroPoints.map(([a, b]) => (
                 <li key={a}>

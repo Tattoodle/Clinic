@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <Page>
       <Seo
-        title="Rathmines Doctors Clinic | Dr George Joyce, GP in Rathmines, Dublin 6"
+        title="Rathmines Doctors Clinic | GP in Rathmines, Dublin 6"
         description="Rathmines Doctors Clinic, Dr George Joyce. Friendly GP care since 1988 at 104 Lower Rathmines Road, Dublin 6. New patients welcome, by appointment. Call (01) 4979938."
         path="/"
       />

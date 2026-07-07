@@ -32,9 +32,30 @@
 
   /* avatar + welcome */
   .head-l{display:flex;align-items:center;gap:16px}
-  .avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;object-position:center 32%;
+  .avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;object-position:center 42%;
     border:2px solid #fff;box-shadow:0 6px 18px -8px rgba(44,58,54,.5);flex:0 0 auto}
   .head .sub{color:var(--muted);font-size:14.5px;margin-top:3px}
+
+  /* password gate */
+  .gate{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;
+    background:radial-gradient(120% 120% at 50% 30%,#f6f3ec,#e7efe9)}
+  .gate[hidden]{display:none}
+  .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;
+    box-shadow:0 22px 60px -28px rgba(44,58,54,.45);padding:38px 32px;width:100%;max-width:360px;
+    text-align:center;display:flex;flex-direction:column;align-items:center}
+  .gate-logo{height:56px;margin-bottom:18px}
+  .gate-eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary-deep);font-weight:600}
+  .gate-title{font-family:"Fraunces",serif;font-weight:600;font-size:26px;margin:6px 0 4px}
+  .gate-sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+  .gate-input{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:12px;font:inherit;
+    font-size:16px;background:#fbfcfb;margin-bottom:12px;text-align:center}
+  .gate-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+  .gate-btn{width:100%;padding:13px;border:0;border-radius:999px;background:var(--primary);color:#fff;
+    font:inherit;font-weight:600;font-size:15.5px;cursor:pointer;transition:.25s var(--ease)}
+  .gate-btn:hover{background:var(--primary-deep)}
+  .gate-err{color:var(--accent);font-size:13.5px;margin-top:12px;min-height:18px}
+  .gate-card.shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
   /* header */
   .head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px;justify-content:space-between;margin-bottom:8px}
@@ -114,6 +135,19 @@
     <path class="pline" d="M6 30 H120 l10 -19 l12 38 l13 -45 l9 26 H314"/>
   </svg>
 </div>
+
+<div class="gate" id="gate" hidden>
+  <form class="gate-card" id="gateForm">
+    <img class="gate-logo" src="logo.svg" alt="" />
+    <div class="gate-eyebrow">Rathmines Doctors Clinic</div>
+    <h2 class="gate-title">Website traffic</h2>
+    <p class="gate-sub">Enter the password to view.</p>
+    <input class="gate-input" id="gatePw" type="password" placeholder="Password" autocomplete="current-password" />
+    <button class="gate-btn" type="submit">Unlock</button>
+    <div class="gate-err" id="gateErr"></div>
+  </form>
+</div>
+
 <div class="wrap">
   <div class="head">
     <div class="head-l">
@@ -255,14 +289,21 @@ function renderBars(id,rows,withFlag){
     </div>`).join('');
 }
 
+const PWKEY='rdc-stats-pw';
 let RANGE='7';
+const pw=()=>sessionStorage.getItem(PWKEY)||'';
+function showGate(){ const g=document.getElementById('gate'); g.hidden=false; setTimeout(()=>document.getElementById('gatePw').focus(),50); }
+function hideGate(){ document.getElementById('gate').hidden=true; }
+
 async function load(){
-  let d;
+  let d, live=false;
   try{
-    const res=await fetch('data.php?range='+RANGE,{cache:'no-store'});
-    if(res.ok){ const j=await res.json(); if(j && j.series){ d=hydrate(j); setLive(true);} }
+    const res=await fetch('data.php?range='+RANGE+'&pw='+encodeURIComponent(pw()),{cache:'no-store'});
+    if(res.status===401){ showGate(); return; }
+    if(res.ok){ const j=await res.json(); if(j && j.series){ d=hydrate(j); live=!j.demo; } }
   }catch(e){}
-  if(!d){ d=sample(RANGE); setLive(false); }
+  if(!d){ d=sample(RANGE); }
+  setLive(live);
   renderCards(d); drawChart(d.series);
   renderBars('topPages',d.topPages,false);
   renderBars('topCountries',d.topCountries,true);
@@ -282,12 +323,26 @@ document.getElementById('rangeToggle').addEventListener('click',e=>{
   load();
 });
 document.getElementById('refreshBtn').addEventListener('click',load);
-load();
-setInterval(load, 5*60*1000); // auto-refresh every 5 min
+document.getElementById('gateForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const val=document.getElementById('gatePw').value;
+  const err=document.getElementById('gateErr'); err.textContent='';
+  const fail=m=>{ err.textContent=m; const c=document.querySelector('.gate-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); };
+  try{
+    const res=await fetch('data.php?range=7&pw='+encodeURIComponent(val),{cache:'no-store'});
+    if(res.ok){ sessionStorage.setItem(PWKEY,val); hideGate(); load(); }
+    else fail('Wrong password');
+  }catch(_){ fail('Could not connect'); }
+});
 
-// dismiss the intro loader
-setTimeout(()=>document.getElementById('loader')&&document.getElementById('loader').classList.add('hide'),1200);
-setTimeout(()=>{const l=document.getElementById('loader'); if(l) l.remove();},1750);
+setInterval(()=>{ if(pw()) load(); }, 5*60*1000); // auto-refresh when unlocked
+
+// intro loader, then show gate or dashboard
+setTimeout(()=>{const l=document.getElementById('loader'); if(l) l.classList.add('hide');},1200);
+setTimeout(()=>{
+  const l=document.getElementById('loader'); if(l) l.remove();
+  if(pw()) load(); else showGate();
+},1750);
 </script>
 </body>
 </html>

@@ -6,11 +6,13 @@ import Loader from "./components/Loader.jsx";
 import PulseLoader from "./components/PulseLoader.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import CookieConsent from "./components/CookieConsent.jsx";
 
 import Home from "./pages/Home.jsx";
 import Services from "./pages/Services.jsx";
 import Doctor from "./pages/Doctor.jsx";
 import Contact from "./pages/Contact.jsx";
+import Privacy from "./pages/Privacy.jsx";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -52,12 +54,15 @@ export default function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/doctor" element={<Doctor />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </AnimatePresence>
           <Footer />
         </>
       )}
+
+      <CookieConsent />
 
       <AnimatePresence>
         {loader === "home" ? (

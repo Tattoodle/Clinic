@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { clinic, nav } from "../data";
 import { asset } from "../assetUrl";
+import { clearConsent } from "../consent";
 
 export default function Footer() {
   return (
@@ -49,6 +50,12 @@ export default function Footer() {
 
         <div className="site-footer__bottom">
           <span>© {new Date().getFullYear()} Rathmines Doctors Clinic, Dublin 6. Dr George Joyce.</span>
+          <span className="site-footer__legal">
+            <Link to="/privacy">Privacy &amp; Cookies</Link>
+            <button type="button" className="linklike" onClick={clearConsent}>
+              Cookie preferences
+            </button>
+          </span>
           <span className="guarantee">Absolute confidentiality guaranteed.</span>
         </div>
       </div>

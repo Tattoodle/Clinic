@@ -4,6 +4,7 @@ import Reveal from "../components/Reveal.jsx";
 import Seo from "../components/Seo.jsx";
 import { clinic } from "../data";
 import { asset } from "../assetUrl";
+import { useConsent } from "../consent";
 
 const mask = (name) => ({
   WebkitMaskImage: `url(${asset(`assets/icons/${name}`)})`,
@@ -11,6 +12,7 @@ const mask = (name) => ({
 });
 
 export default function Contact() {
+  const [consent, setConsent] = useConsent();
   return (
     <Page>
       <Seo
@@ -68,12 +70,26 @@ export default function Contact() {
 
           <Reveal delay={0.1}>
             <div className="map-wrap">
-              <iframe
-                title="Map showing Rathmines Doctor's Clinic, 104 Lower Rathmines Road, Dublin 6"
-                src={clinic.mapEmbed}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+              {consent === "accepted" ? (
+                <iframe
+                  title="Map showing Rathmines Doctor's Clinic, 104 Lower Rathmines Road, Dublin 6"
+                  src={clinic.mapEmbed}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
+                <div className="map-placeholder">
+                  <span
+                    className="map-placeholder__icon"
+                    style={mask("compass.svg")}
+                    aria-hidden="true"
+                  />
+                  <p>The Google map loads only with your consent, to respect your privacy.</p>
+                  <button className="btn btn--primary" onClick={() => setConsent("accepted")}>
+                    Load map
+                  </button>
+                </div>
+              )}
             </div>
             <a className="map-link" href={clinic.mapLink} target="_blank" rel="noopener">
               <span className="map-link__icon" style={mask("compass.svg")} />

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
@@ -18,6 +18,23 @@ function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }, [pathname]);
+  return null;
+}
+
+// React Router changes pages client-side (no new HTTP request), so Cloudflare's
+// request-log analytics only ever sees the very first page a visitor lands on.
+// This pings the current path on every *subsequent* route change so each page
+// view is a real edge request Cloudflare can count in "Most-visited pages".
+function PageViewBeacon() {
+  const { pathname } = useLocation();
+  const isFirst = useRef(true);
+  useEffect(() => {
+    if (isFirst.current) {
+      isFirst.current = false; // the initial load already hit the server for this path
+      return;
+    }
+    fetch(pathname, { cache: "no-store", keepalive: true }).catch(() => {});
   }, [pathname]);
   return null;
 }
@@ -42,6 +59,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <PageViewBeacon />
       <Header />
 
       {/* Page content mounts once the loader clears, so its entrance

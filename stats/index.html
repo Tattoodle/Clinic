@@ -327,11 +327,11 @@ function hideGate(){ document.getElementById('gate').hidden=true; }
 function showLoader(){ const l=document.getElementById('loader'); if(l) l.classList.remove('hide'); }
 function hideLoader(){ const l=document.getElementById('loader'); if(l) l.classList.add('hide'); }
 
-async function load(){
+async function load(force){
   showLoader();
   let d, live=false;
   try{
-    const res=await fetch('data.php?range='+RANGE+'&pw='+encodeURIComponent(pw()),{cache:'no-store'});
+    const res=await fetch('data.php?range='+RANGE+(force?'&fresh=1':'')+'&pw='+encodeURIComponent(pw()),{cache:'no-store'});
     if(res.status===429){ const j=await res.json().catch(()=>({})); hideLoader(); showGate();
       document.getElementById('gateErr').textContent='Too many attempts. Try again in about '+Math.ceil((j.retry||300)/60)+' min.'; return; }
     if(res.status===401){ hideLoader(); showGate(); return; }
@@ -358,7 +358,7 @@ document.getElementById('rangeToggle').addEventListener('click',e=>{
   document.querySelectorAll('#rangeToggle button').forEach(x=>x.classList.toggle('on',x===b));
   load();
 });
-document.getElementById('refreshBtn').addEventListener('click',load);
+document.getElementById('refreshBtn').addEventListener('click',()=>load(true));
 document.getElementById('gateForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const val=document.getElementById('gatePw').value;

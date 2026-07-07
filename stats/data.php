@@ -38,9 +38,10 @@ $zone  = $cfg['zone'] ?? '';
 
 if (!$token || !$zone) { echo json_encode(sample($days) + ['demo' => true]); exit; }
 
-// cache 5 minutes
+// cache ~2 min (skip it when the page asks for a forced refresh)
+$fresh = !empty($_GET['fresh']);
 $cache = sys_get_temp_dir() . "/cfstats_{$zone}_{$range}.json";
-if (is_file($cache) && time() - filemtime($cache) < 300) { echo file_get_contents($cache); exit; }
+if (!$fresh && is_file($cache) && time() - filemtime($cache) < 120) { echo file_get_contents($cache); exit; }
 
 $since = gmdate('Y-m-d', time() - $days * 86400);
 $q = 'query{viewer{zones(filter:{zoneTag:"'.$zone.'"}){httpRequests1dGroups(limit:400,orderBy:[date_ASC],filter:{date_geq:"'.$since.'"}){dimensions{date}sum{pageViews threats}uniq{uniques}}}}}';

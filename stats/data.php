@@ -32,7 +32,10 @@ if ($PASSWORD === null || !hash_equals((string)$PASSWORD, (string)$pw)) {
 if (is_file($rlFile)) @unlink($rlFile); // correct password clears the counter
 
 $range = $_GET['range'] ?? '7';
-$days  = $range === 'all' ? 365 : max(1, (int)$range);
+// Cloudflare caps this query at 52w1d1h; 365 days measured from "now" (not
+// midnight) overshoots that by several hours and the API errors out, which
+// silently fell back to sample data. 350 days stays safely under the cap.
+$days  = $range === 'all' ? 350 : max(1, (int)$range);
 $token = $cfg['token'] ?? '';
 $zone  = $cfg['zone'] ?? '';
 

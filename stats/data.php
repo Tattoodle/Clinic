@@ -50,7 +50,6 @@ $out = json_encode([
   'busiest'  => $bd ? date('l', strtotime($bd)) : '—',
   'series'   => $series,
   'topPages' => topPages($token, $zone, $days),
-  'topCountries' => topCountries($token, $zone, $days),
   'live' => true,
 ]);
 @file_put_contents($cache, $out);
@@ -64,19 +63,6 @@ function cf($token, $query) {
     CURLOPT_POSTFIELDS => json_encode(['query' => $query])]);
   $r = curl_exec($ch); curl_close($ch);
   return json_decode($r, true) ?: [];
-}
-
-function topCountries($token, $zone, $days) {
-  $since = gmdate('Y-m-d\TH:i:s\Z', time() - 82800); // adaptive dataset capped at 1 day on this plan
-  $q = 'query{viewer{zones(filter:{zoneTag:"'.$zone.'"}){httpRequestsAdaptiveGroups(limit:6,orderBy:[count_DESC],filter:{datetime_geq:"'.$since.'",requestSource:"eyeball"}){count dimensions{clientCountryName}}}}}';
-  $rows = cf($token, $q)['data']['viewer']['zones'][0]['httpRequestsAdaptiveGroups'] ?? [];
-  $names = ['IE'=>'Ireland','GB'=>'United Kingdom','US'=>'United States','PL'=>'Poland','FR'=>'France','DE'=>'Germany','ES'=>'Spain','IT'=>'Italy','NL'=>'Netherlands','CA'=>'Canada','AU'=>'Australia','RO'=>'Romania','BR'=>'Brazil','IN'=>'India'];
-  $out = [];
-  foreach ($rows as $r) {
-    $c = $r['dimensions']['clientCountryName'] ?? '??';
-    $out[] = ['name' => $names[$c] ?? $c, 'flag' => flag($c), 'v' => (int)$r['count']];
-  }
-  return $out;
 }
 
 function topPages($token, $zone, $days) {
@@ -95,12 +81,6 @@ function topPages($token, $zone, $days) {
   return $out;
 }
 
-function flag($cc) {
-  if (strlen($cc) !== 2) return '🏳️';
-  $a = ord($cc[0]) - 65 + 0x1F1E6; $b = ord($cc[1]) - 65 + 0x1F1E6;
-  return mb_convert_encoding('&#' . $a . ';&#' . $b . ';', 'UTF-8', 'HTML-ENTITIES');
-}
-
 function sample($days) {
   $series = []; $base = $days <= 7 ? 42 : ($days <= 30 ? 38 : 34); $v = 0; $pv = 0;
   for ($i = $days - 1; $i >= 0; $i--) {
@@ -110,6 +90,5 @@ function sample($days) {
   }
   $pv = (int)round($v * 2.4);
   return ['visitors'=>$v,'pageviews'=>$pv,'threats'=>(int)round($v*0.35),'busiest'=>'Monday','series'=>$series,
-    'topPages'=>[['name'=>'Home','v'=>(int)round($pv*.34)],['name'=>'Services','v'=>(int)round($pv*.24)],['name'=>'Contact & Hours','v'=>(int)round($pv*.2)],['name'=>'Meet the Doctor','v'=>(int)round($pv*.14)]],
-    'topCountries'=>[['name'=>'Ireland','flag'=>'🇮🇪','v'=>(int)round($v*.82)],['name'=>'United Kingdom','flag'=>'🇬🇧','v'=>(int)round($v*.09)],['name'=>'United States','flag'=>'🇺🇸','v'=>(int)round($v*.06)]]];
+    'topPages'=>[['name'=>'Home','v'=>(int)round($pv*.34)],['name'=>'Services','v'=>(int)round($pv*.24)],['name'=>'Contact & Hours','v'=>(int)round($pv*.2)],['name'=>'Meet the Doctor','v'=>(int)round($pv*.14)]]];
 }

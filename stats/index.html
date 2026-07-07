@@ -189,10 +189,10 @@
       <div id="topPages"></div>
     </div>
     <div class="panel">
-      <h3>Where visitors are
-        <span class="help" tabindex="0">?<span class="tip">The countries your visitors are browsing from.</span></span>
+      <h3>Busiest days
+        <span class="help" tabindex="0">?<span class="tip">The days of the week your website gets the most visitors.</span></span>
       </h3>
-      <div id="topCountries"></div>
+      <div id="busyDays"></div>
     </div>
   </div>
 
@@ -239,6 +239,14 @@ function sample(key){
 }
 
 function nf(n){return n.toLocaleString('en-IE')}
+
+// Which weekdays the site is busiest, summed from the daily visitor series.
+function busiestDays(series){
+  const names=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const sums=[0,0,0,0,0,0,0];
+  (series||[]).forEach(s=>{ const d=(s.date instanceof Date)?s.date:new Date(s.date+'T00:00:00'); if(!isNaN(d)) sums[d.getDay()]+=s.value; });
+  return names.map((name,i)=>({name,v:sums[i]})).filter(r=>r.v>0).sort((a,b)=>b.v-a.v);
+}
 
 function renderCards(d){
   const cards=[
@@ -307,7 +315,7 @@ async function load(){
   setLive(live);
   renderCards(d); drawChart(d.series);
   renderBars('topPages',d.topPages,false);
-  renderBars('topCountries',d.topCountries,true);
+  renderBars('busyDays',busiestDays(d.series),false);
   document.getElementById('updated').textContent='Updated '+new Date().toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit'});
 }
 function hydrate(j){ j.series=j.series.map(s=>({date:new Date(s.date),value:s.value})); return j; }

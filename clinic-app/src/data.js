@@ -12,6 +12,9 @@ export const clinic = {
   addressLines: ["104 Lower Rathmines Road", "Dublin 6", "D06 F9P0"],
   hours: "Mon–Fri, 12pm–7pm",
   fee: "€70",
+  // Google Business rating — static; update if it moves (it changes slowly).
+  googleRating: 4.4,
+  googleReviews: 59,
   parking:
     "Parking is available nearby, e.g. Euro Car Parks, Richmond Hill, Dublin 6, D06 XW70.",
   mapEmbed:

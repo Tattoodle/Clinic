@@ -492,6 +492,33 @@ img { max-width: 100%; display: block; }
   opacity: 0.85;
 }
 
+/* ============ RATING (social proof) ============ */
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 15px;
+}
+.rating__stars {
+  position: relative;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: 3px;
+}
+.rating__stars-bg { color: #dfe4e0; }
+.rating__stars-fg {
+  position: absolute;
+  left: 0; top: 0;
+  color: #e0a63e;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.rating__score { font-weight: 700; }
+.rating__count { color: var(--muted); font-size: 14px; }
+.rating:hover .rating__count { color: var(--primary-deep); text-decoration: underline; text-underline-offset: 2px; }
+
 /* ============ COOKIE CONSENT ============ */
 .cookie {
   position: fixed;

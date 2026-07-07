@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Page from "../components/Page.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Seo from "../components/Seo.jsx";
+import RatingBadge from "../components/RatingBadge.jsx";
 import { clinic } from "../data";
 import { asset } from "../assetUrl";
 
@@ -83,6 +84,15 @@ export default function Home() {
               <Link className="btn btn--ghost" to="/services">
                 View services
               </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.52 }}
+              style={{ marginTop: 24 }}
+            >
+              <RatingBadge />
             </motion.div>
           </div>
 

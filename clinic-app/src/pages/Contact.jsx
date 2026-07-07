@@ -37,7 +37,7 @@ export default function Contact() {
       <section className="section--tight">
         <div className="container contact-grid">
           <Reveal className="surface-card info-block">
-            <h3>Get in touch</h3>
+            <h2>Get in touch</h2>
 
             <div className="info-row">
               <span className="info-row__icon" style={mask("checkup.svg")} />
@@ -103,7 +103,7 @@ export default function Contact() {
       <section className="section--tight">
         <div className="container contact-grid">
           <Reveal className="surface-card info-block">
-            <h3>Fees</h3>
+            <h2>Fees</h2>
             <div className="fee-big">{clinic.fee}</div>
             <div className="fee-label">Standard consultation fee</div>
             <p style={{ marginTop: 16, color: "var(--muted)", fontSize: 15 }}>
@@ -112,7 +112,7 @@ export default function Contact() {
           </Reveal>
 
           <Reveal delay={0.1} className="surface-card info-block">
-            <h3>Opening hours</h3>
+            <h2>Opening hours</h2>
             <div className="hours-row">
               <b>Monday – Friday</b>
               <span>12pm – 7pm</span>

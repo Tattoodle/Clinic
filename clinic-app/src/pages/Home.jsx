@@ -29,7 +29,7 @@ export default function Home() {
     <Page>
       <Seo
         title="Rathmines Doctors Clinic | GP in Rathmines, Dublin 6"
-        description="Rathmines Doctors Clinic, Dr George Joyce. Friendly GP care since 1988 at 104 Lower Rathmines Road, Dublin 6. New patients welcome, by appointment. Call (01) 4979938."
+        description="Rathmines Doctors Clinic, Dr George Joyce. Friendly GP care since 1988 in Dublin 6. New patients welcome, by appointment. Call (01) 4979938."
         path="/"
       />
       {/* HERO */}
@@ -125,7 +125,7 @@ export default function Home() {
             {cards.map((c, i) => (
               <Reveal key={c.to} delay={i * 0.1}>
                 <Link to={c.to} className="linkcard">
-                  <h3>{c.title}</h3>
+                  <h2>{c.title}</h2>
                   <p>{c.text}</p>
                   <span className="linkcard__more">Open page →</span>
                 </Link>

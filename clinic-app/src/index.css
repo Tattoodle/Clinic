@@ -310,7 +310,7 @@ img { max-width: 100%; display: block; }
   transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease);
 }
 .linkcard:hover { transform: translateY(-4px); box-shadow: var(--shadow); background: var(--surface); }
-.linkcard h3 { font-size: 22px; margin-bottom: 8px; }
+.linkcard h2 { font-size: 22px; margin-bottom: 8px; }
 .linkcard p { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
 .linkcard__more { font-weight: 600; color: var(--primary-deep); font-size: 15px; }
 .linkcard:hover .linkcard__more { letter-spacing: 0.02em; }
@@ -375,7 +375,7 @@ img { max-width: 100%; display: block; }
 /* ============ CONTACT ============ */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
 .info-block { padding: 30px; }
-.info-block h3 { font-size: 24px; margin-bottom: 16px; }
+.info-block h2 { font-size: 24px; margin-bottom: 16px; }
 .info-row { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); }
 .info-row:first-of-type { border-top: none; }
 .info-row__icon {

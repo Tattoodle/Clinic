@@ -19,7 +19,7 @@ export default function Services() {
     <Page>
       <Seo
         title="GP Services | Rathmines Doctors Clinic, Dublin 6"
-        description="General-practice services at Rathmines Doctors Clinic: consultations, chronic disease management, health checks, mental health support, prescriptions, referrals and more. Call (01) 4979938."
+        description="General-practice services at Rathmines Doctors Clinic: consultations, chronic disease management, health checks, prescriptions and referrals. Call (01) 4979938."
         path="/services"
       />
       <section className="page-head">

@@ -299,14 +299,17 @@ function drawChart(series){
     const i=+h.dataset.i, s=series[i], dot=dots[i];
     h.addEventListener('mouseenter',()=>{
       const r=dot.getBoundingClientRect();
-      tip.textContent=s.date.toLocaleDateString('en-IE',{weekday:'short',day:'numeric',month:'short'})+' · '+nf(s.value)+' visitors';
+      tip.textContent=s.date.toLocaleDateString('en-IE',{weekday:'short',day:'numeric',month:'short',year:'numeric'})+' · '+nf(s.value)+' visitors';
       tip.style.left=(r.left+r.width/2)+'px'; tip.style.top=(r.top-6)+'px'; tip.style.opacity='1'; dot.classList.add('on');
     });
     h.addEventListener('mouseleave',()=>{ tip.style.opacity='0'; dot.classList.remove('on'); });
   });
-  // x labels: first, middle, last
+  // x labels: first, middle, last (add the year when the range spans more than one)
   const f=series[0].date, m=series[Math.floor(series.length/2)].date, l=series[series.length-1].date;
-  const fmt=dt=>dt.toLocaleDateString('en-IE',{day:'numeric',month:'short'});
+  const spansYears = f.getFullYear() !== l.getFullYear();
+  const fmt=dt=>dt.toLocaleDateString('en-IE', spansYears
+    ? {day:'numeric',month:'short',year:'numeric'}
+    : {day:'numeric',month:'short'});
   document.getElementById('xlab').innerHTML=`<span>${fmt(f)}</span><span>${fmt(m)}</span><span>${fmt(l)}</span>`;
 }
 function ensureTip(){ let t=document.getElementById('chartTip'); if(!t){ t=document.createElement('div'); t.id='chartTip'; document.body.appendChild(t); } return t; }

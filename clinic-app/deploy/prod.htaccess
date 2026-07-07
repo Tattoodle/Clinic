@@ -1,0 +1,10 @@
+# Rathmines Doctors Clinic — production (live root)
+# Indexable (no noindex). SPA routing: serve real files/dirs, else the app's index.html.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.html [L]
+</IfModule>

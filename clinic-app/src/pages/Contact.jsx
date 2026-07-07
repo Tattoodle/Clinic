@@ -22,7 +22,7 @@ export default function Contact() {
         <div className="container">
           <Reveal>
             <span className="eyebrow">Visit us</span>
-            <h1>Contact &amp; Hours</h1>
+            <h1>Contact, Hours &amp; Fees</h1>
             <p className="lede" style={{ marginTop: 16, maxWidth: "54ch" }}>
               We aim to provide prompt appointments for both routine and urgent concerns.
               To book, please telephone the clinic.

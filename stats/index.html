@@ -24,12 +24,13 @@
 
   /* intro loader (heart monitor, from the website) */
   .loader{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(120% 120% at 50% 40%,#f6f3ec,#e7efe9);transition:opacity .5s var(--ease)}
+    background:rgba(238,242,240,0.92);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+    transition:opacity .45s var(--ease)}
   .loader.hide{opacity:0;pointer-events:none}
   .loader .pulse{width:230px;height:46px}
   .loader .pline{fill:none;stroke:var(--primary);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
-    stroke-dasharray:420;stroke-dashoffset:0;animation:draw 1.1s var(--ease)}
-  @keyframes draw{from{stroke-dashoffset:420}to{stroke-dashoffset:0}}
+    stroke-dasharray:40 320;animation:flow 1.4s linear infinite}
+  @keyframes flow{from{stroke-dashoffset:360}to{stroke-dashoffset:0}}
 
   /* avatar + welcome */
   .head-l{display:flex;align-items:center;gap:16px}
@@ -115,6 +116,13 @@
   @keyframes lfade{from{opacity:0}to{opacity:1}}
   .chart .dot{fill:#fff;stroke:var(--primary);stroke-width:2.5}
   .xlab{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}
+  .chart .dot{transition:r .12s var(--ease)}
+  .chart .hit:hover + .dot, .chart .dot.on{r:5.5}
+  #chartTip{position:fixed;z-index:200;background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;
+    padding:7px 11px;border-radius:9px;pointer-events:none;white-space:nowrap;opacity:0;
+    transform:translate(-50%,-100%);transition:opacity .14s var(--ease);box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+  #chartTip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    border:5px solid transparent;border-top-color:var(--ink)}
 
   .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
   .bar-row{display:flex;align-items:center;gap:12px;margin:14px 0}
@@ -281,12 +289,25 @@ function drawChart(series){
       <stop offset="1" stop-color="#5f8d80" stop-opacity="0"/></linearGradient></defs>
     <path class="area" d="${area}" fill="url(#g)"/>
     <path class="line" d="${line}"/>
-    ${pts.map(p=>`<circle class="dot" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5"/>`).join('')}`;
+    ${pts.map(p=>`<circle class="dot" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5"/>`).join('')}
+    ${pts.map((p,i)=>`<circle class="hit" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="18" fill="transparent" data-i="${i}"/>`).join('')}`;
+  // hover a point to see its date + visitors
+  const tip=ensureTip(), dots=svg.querySelectorAll('.dot');
+  svg.querySelectorAll('.hit').forEach(h=>{
+    const i=+h.dataset.i, s=series[i], dot=dots[i];
+    h.addEventListener('mouseenter',()=>{
+      const r=dot.getBoundingClientRect();
+      tip.textContent=s.date.toLocaleDateString('en-IE',{weekday:'short',day:'numeric',month:'short'})+' · '+nf(s.value)+' visitors';
+      tip.style.left=(r.left+r.width/2)+'px'; tip.style.top=(r.top-6)+'px'; tip.style.opacity='1'; dot.classList.add('on');
+    });
+    h.addEventListener('mouseleave',()=>{ tip.style.opacity='0'; dot.classList.remove('on'); });
+  });
   // x labels: first, middle, last
   const f=series[0].date, m=series[Math.floor(series.length/2)].date, l=series[series.length-1].date;
   const fmt=dt=>dt.toLocaleDateString('en-IE',{day:'numeric',month:'short'});
   document.getElementById('xlab').innerHTML=`<span>${fmt(f)}</span><span>${fmt(m)}</span><span>${fmt(l)}</span>`;
 }
+function ensureTip(){ let t=document.getElementById('chartTip'); if(!t){ t=document.createElement('div'); t.id='chartTip'; document.body.appendChild(t); } return t; }
 
 function renderBars(id,rows,withFlag){
   const max=Math.max(...rows.map(r=>r.v));
@@ -303,12 +324,17 @@ let RANGE='7';
 const pw=()=>sessionStorage.getItem(PWKEY)||'';
 function showGate(){ const g=document.getElementById('gate'); g.hidden=false; setTimeout(()=>document.getElementById('gatePw').focus(),50); }
 function hideGate(){ document.getElementById('gate').hidden=true; }
+function showLoader(){ const l=document.getElementById('loader'); if(l) l.classList.remove('hide'); }
+function hideLoader(){ const l=document.getElementById('loader'); if(l) l.classList.add('hide'); }
 
 async function load(){
+  showLoader();
   let d, live=false;
   try{
     const res=await fetch('data.php?range='+RANGE+'&pw='+encodeURIComponent(pw()),{cache:'no-store'});
-    if(res.status===401){ showGate(); return; }
+    if(res.status===429){ const j=await res.json().catch(()=>({})); hideLoader(); showGate();
+      document.getElementById('gateErr').textContent='Too many attempts. Try again in about '+Math.ceil((j.retry||300)/60)+' min.'; return; }
+    if(res.status===401){ hideLoader(); showGate(); return; }
     if(res.ok){ const j=await res.json(); if(j && j.series){ d=hydrate(j); live=!j.demo; } }
   }catch(e){}
   if(!d){ d=sample(RANGE); }
@@ -317,6 +343,7 @@ async function load(){
   renderBars('topPages',d.topPages,false);
   renderBars('busyDays',busiestDays(d.series),false);
   document.getElementById('updated').textContent='Updated '+new Date().toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit'});
+  hideLoader();
 }
 function hydrate(j){ j.series=j.series.map(s=>({date:new Date(s.date),value:s.value})); return j; }
 function setLive(on){
@@ -339,19 +366,16 @@ document.getElementById('gateForm').addEventListener('submit', async e=>{
   const fail=m=>{ err.textContent=m; const c=document.querySelector('.gate-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); };
   try{
     const res=await fetch('data.php?range=7&pw='+encodeURIComponent(val),{cache:'no-store'});
+    if(res.status===429){ const j=await res.json().catch(()=>({})); fail('Too many attempts. Try again in about '+Math.ceil((j.retry||300)/60)+' min.'); return; }
     if(res.ok){ sessionStorage.setItem(PWKEY,val); hideGate(); load(); }
     else fail('Wrong password');
   }catch(_){ fail('Could not connect'); }
 });
 
-setInterval(()=>{ if(pw()) load(); }, 5*60*1000); // auto-refresh when unlocked
+setInterval(()=>{ if(pw() && !document.hidden) load(); }, 5*60*1000); // auto-refresh when unlocked
 
-// intro loader, then show gate or dashboard
-setTimeout(()=>{const l=document.getElementById('loader'); if(l) l.classList.add('hide');},1200);
-setTimeout(()=>{
-  const l=document.getElementById('loader'); if(l) l.remove();
-  if(pw()) load(); else showGate();
-},1750);
+// brief intro heartbeat, then load (loader stays up during the live-data fetch) or show the gate
+setTimeout(()=>{ if(pw()) load(); else { hideLoader(); showGate(); } }, 700);
 </script>
 </body>
 </html>

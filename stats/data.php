@@ -9,13 +9,27 @@ $cfg = @include __DIR__ . '/config.php';
 if (!is_array($cfg)) $cfg = [];
 $PASSWORD = $cfg['password'] ?? null;
 
+// --- rate limiting (per client IP) to stop password guessing ---
+$ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? ($_SERVER['REMOTE_ADDR'] ?? '0');
+$rlFile = sys_get_temp_dir() . '/cfstats_rl_' . md5($ip) . '.json';
+$rl = json_decode(@file_get_contents($rlFile), true) ?: ['fails' => 0, 'first' => 0, 'until' => 0];
+$now = time();
+if (($rl['until'] ?? 0) > $now) { http_response_code(429); echo json_encode(['error' => 'locked', 'retry' => $rl['until'] - $now]); exit; }
+if (!empty($rl['first']) && $now - $rl['first'] > 900) $rl = ['fails' => 0, 'first' => 0, 'until' => 0]; // reset window after 15 min
+
 // --- password gate (protects this endpoint too) ---
 $pw = $_GET['pw'] ?? ($_SERVER['HTTP_X_STATS_PW'] ?? '');
 if ($PASSWORD === null || !hash_equals((string)$PASSWORD, (string)$pw)) {
+  if ($pw !== '') { // count only real guesses
+    $rl['fails']++; if (empty($rl['first'])) $rl['first'] = $now;
+    if ($rl['fails'] >= 5) { $rl['until'] = $now + 300; } // lock 5 min after 5 wrong tries
+    @file_put_contents($rlFile, json_encode($rl));
+  }
   http_response_code(401);
   echo json_encode(['error' => 'unauthorized']);
   exit;
 }
+if (is_file($rlFile)) @unlink($rlFile); // correct password clears the counter
 
 $range = $_GET['range'] ?? '7';
 $days  = $range === 'all' ? 365 : max(1, (int)$range);

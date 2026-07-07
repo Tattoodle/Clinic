@@ -20,7 +20,7 @@ const heroPoints = [
 const cards = [
   { to: "/services", title: "Services", text: "A full range of general-practice care for individuals and families." },
   { to: "/doctor", title: "Meet the Doctor", text: "Dr George Joyce, serving the Rathmines community since 1988." },
-  { to: "/contact", title: "Contact & Hours", text: "Phone, location, fees, opening hours and out-of-hours service." },
+  { to: "/contact", title: "Contact & Hours", text: "Our €70 consultation fee, where to find us, opening hours and out-of-hours cover." },
 ];
 
 export default function Home() {
